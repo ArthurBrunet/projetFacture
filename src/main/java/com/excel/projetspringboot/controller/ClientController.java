@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class ClientController {
@@ -19,13 +19,28 @@ public class ClientController {
     ClientService clientService;
 
     @GetMapping("/clients")
-    public ResponseEntity<List<Client>> getAllClients() {
-        return new ResponseEntity<List<Client>>(clientService.clientList(),HttpStatus.OK);
+    public String getAllClients(ModelMap modelMap) {
+        List<Client> clientList = clientService.getAll();
+        modelMap.addAttribute("clientList", clientList);
+        return "client/clients";
     }
 
-    @PostMapping("/client")
-    public ResponseEntity<Client> createClient(@Valid @RequestBody Client client) {
-        Client clientDb = clientService.createClient(client);
-        return new ResponseEntity<Client>(clientDb,HttpStatus.CREATED);
+    @GetMapping("/client")
+    public String getClient(@RequestParam(name = "id") Long id, ModelMap modelMap) {
+        Optional<Client> clientOptional = clientService.getById(id);
+        clientOptional.ifPresent(client -> modelMap.addAttribute("client", client));
+        return "client/clientDetails";
+    }
+
+    @GetMapping("/client/form")
+    public String formClient(ModelMap modelMap) {
+        modelMap.addAttribute("client", new Client());
+        return "client/clientForm";
+    }
+
+    @PostMapping(value = {"/client/create"})
+    public ResponseEntity<Client> createClient(@ModelAttribute Client client) {
+        Client clientDb = clientService.create(client);
+        return new ResponseEntity<>(clientDb,HttpStatus.CREATED);
     }
 }

@@ -1,21 +1,32 @@
 package com.excel.projetspringboot.models;
 
-import com.excel.projetspringboot.models.typeFacture.TypeStatusFacture;
-import lombok.Data;
+import com.excel.projetspringboot.models.typeGlobal.TypeStatusFacture;
+import com.excel.projetspringboot.models.typeGlobal.TypeTVA;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Column;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 
-@Data
-public class Facture {
+
+@Getter
+@Setter
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "TYPE_FACTURE")
+@DiscriminatorValue("MERE")
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
+@SuperBuilder(toBuilder = true)
+public class Facture implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     private double HT;
 
-    @Min(0)
-    @Max(100)
-    private int tva;
+    private TypeTVA tva;
 
     private double ttc;
 
@@ -29,9 +40,13 @@ public class Facture {
 
     private String nature;
 
+    @ManyToOne
+    @JoinColumn(name = "client_id")
     private Client client;
 
     @Column(unique = true)
     private String ref;
 
+    public Facture() {
+    }
 }

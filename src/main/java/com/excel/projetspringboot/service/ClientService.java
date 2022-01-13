@@ -14,19 +14,19 @@ public class ClientService {
     @Autowired
     ClientRepository clientRepository;
 
-    public Client createClient(Client client) {
+    public Client create(Client client) {
         return clientRepository.save(client);
     }
 
-    public List<Client> clientList() {
+    public List<Client> getAll() {
         return (List<Client>) clientRepository.findAll();
     }
 
-    public Optional<Client> getClientById(Long id) {
+    public Optional<Client> getById(Long id) {
         return clientRepository.findById(id);
     }
 
-    public Optional<Client> getClientByEmail(String email) {
+    public Optional<Client> getByEmail(String email) {
         return clientRepository.findByEmail(email);
     }
 

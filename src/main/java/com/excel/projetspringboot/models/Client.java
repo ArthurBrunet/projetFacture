@@ -1,19 +1,22 @@
 package com.excel.projetspringboot.models;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
-@Data
-@Builder
+
+@Getter
+@Setter
 @Entity
-public class Client {
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class Client implements Serializable {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -32,13 +35,4 @@ public class Client {
     public Client() {
 
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
 }
