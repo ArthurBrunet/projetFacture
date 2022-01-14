@@ -78,11 +78,13 @@ public class FactureController {
     }
 
     @GetMapping("/factures")
-    public void getFacturesByDate(@RequestParam(name = "date") String stringDateSearch) {
+    public String getFacturesByDate(@RequestParam(name = "date") String stringDateSearch, ModelMap modelMap) {
         LocalDate date = LocalDate.parse(stringDateSearch);
         LocalDate firstDayOfMonth = date.withDayOfMonth(1);
         LocalDate lastDayOfMonth = firstDayOfMonth.plusMonths(1).minusDays(1);
         List<Facture> factureList =  factureService.findByDateEmiseBetween(firstDayOfMonth,lastDayOfMonth);
+        modelMap.addAttribute("factureList", factureList);
+        return "facture/factures";
     }
 
     @PostMapping(value = {"/facture/create"})

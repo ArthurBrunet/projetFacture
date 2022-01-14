@@ -24,16 +24,16 @@
         </thead>
         <tbody>
         <tr th:each="item : ${factureList}">
-            <th scope="col" th:text="*{dateEmise}"></th>
-            <th scope="col" th:text="*{typeStatusFacture}"></th>
-            <th scope="col" th:text="*{ref}"></th>
-            <th scope="col" th:text="*{client.nom +' '+ client.prenom}"></th>
-            <th scope="col" th:text="*{nature}"></th>
-            <th scope="col" th:text="*{tva}"></th>
-            <th scope="col" th:text="*{tvaSomme}"></th>
-            <th scope="col" th:text="*{HT}"></th>
-            <th scope="col" th:text="*{ttc}"></th>
-            <th scope="col" th:text="*{datePaid}"></th>
+            <th scope="col" th:text="*{item.dateEmise}"></th>
+            <th scope="col" th:text="*{item.typeStatusFacture}"></th>
+            <th scope="col" th:text="*{item.ref}"></th>
+            <th scope="col" th:text="*{item.client.nom +' '+ item.client.prenom}"></th>
+            <th scope="col" th:text="*{item.nature}"></th>
+            <th scope="col" th:text="*{item.tva}"></th>
+            <th scope="col" th:text="*{item.tvaSomme}"></th>
+            <th scope="col" th:text="*{item.HT}"></th>
+            <th scope="col" th:text="*{item.ttc}"></th>
+            <th scope="col" th:text="*{item.datePaid}"></th>
         </tr>
         </tbody>
     </table>
