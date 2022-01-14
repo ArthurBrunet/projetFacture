@@ -12,4 +12,8 @@ public enum TypeTVA {
     public double getSomme() {
         return somme;
     }
+
+    public static TypeTVA valueofLabel(String label) {
+        return TypeTVA.valueOf(label);
+    }
 }

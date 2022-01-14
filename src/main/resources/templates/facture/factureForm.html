@@ -13,7 +13,7 @@
 <div id="main" class="container-fluid">
     <form action="#" th:action="@{/facture/create}" th:object="${facture}" method="post">
 
-        <!--<div class="form-group row">
+        <div class="form-group row">
             <label th:for="HT" class="col-sm-2 col-form-label">HT</label>
             <div class="col-sm-10">
                 <input type="number" class="form-control" id="HT"
@@ -25,7 +25,7 @@
             <label th:for="tva" class="col-sm-2 col-form-label">tva</label>
             <div class="col-sm-10">
                 <select id="type" th:field="*{tva}">
-                    <option th:each="TVAType : ${TVATypes}" th:value="${TVAType}" th:text="${TVAType.getSomme()}"></option>
+                    <option th:each="TVAType : ${TVATypes}" th:value="${TVAType.getSomme()}" th:text="${TVAType.getSomme()}"></option>
                 </select>
             </div>
         </div>
@@ -37,18 +37,18 @@
                     <option th:each="encaissementType : ${encaissementTypes}" th:value="${encaissementType}" th:text="${encaissementType}"></option>
                 </select>
             </div>
-        </div>-->
+        </div>
 
         <div class="form-group row">
             <label th:for="client" class="col-sm-2 col-form-label">Client</label>
             <div class="col-sm-10">
-                <select id="client" th:field="*{client}">
-                    <option th:each="clientinst : ${listClient}" th:value="${clientinst}" th:text="${clientinst.toString()}"></option>
+                <select id="client" th:field="*{id}">
+                    <option th:each="clientinst : ${listClient}" th:value="${clientinst.id}" th:text="${clientinst.nom + ' ' + clientinst.prenom}"></option>
                 </select>
             </div>
         </div>
 
-        <!--<div class="form-group row">
+        <div class="form-group row">
             <label th:for="nature" class="col-sm-2 col-form-label">nature</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" id="nature"
@@ -62,7 +62,7 @@
                 <input type="text" class="form-control" id="ref"
                        th:field="*{ref}"/>
             </div>
-        </div>-->
+        </div>
 
         <div class="form-group">
             <div class="col-sm-12">

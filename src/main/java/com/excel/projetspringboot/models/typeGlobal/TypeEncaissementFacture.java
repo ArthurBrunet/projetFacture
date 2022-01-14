@@ -12,4 +12,8 @@ public enum TypeEncaissementFacture {
     public String getType() {
         return type;
     }
+
+    public static TypeEncaissementFacture valueofLabel(String label) {
+        return TypeEncaissementFacture.valueOf(label);
+    }
 }

@@ -1,5 +1,6 @@
 package com.excel.projetspringboot.controller;
 
+import com.excel.projetspringboot.formMapper.FormMapperFacture;
 import com.excel.projetspringboot.models.Client;
 import com.excel.projetspringboot.models.Facture;
 import com.excel.projetspringboot.models.typeFacture.FactureFormation;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class FactureController {
@@ -76,8 +78,23 @@ public class FactureController {
     }
 
     @PostMapping(value = {"/facture/create"})
-    public ResponseEntity<Facture> createFacture(@ModelAttribute Facture facture) {
-        Facture factureCreate = factureService.create(facture);
-        return new ResponseEntity<>(factureCreate, HttpStatus.CREATED);
+    public ResponseEntity<Facture> createFacture(@ModelAttribute FormMapperFacture facture) {
+        Long idClient = facture.getId();
+        Optional<Client> client = clientService.getById(idClient);
+        if (client.isPresent()){
+            Facture factureToCreate = new Facture().toBuilder()
+                    .client(client.get())
+                    .tva(TypeTVA.valueofLabel(facture.getTva()))
+                    .HT(facture.getHT())
+                    .nature(facture.getNature())
+                    .ref(facture.getRef())
+                    .typeStatusFacture(TypeStatusFacture.valueOf(facture.getTypeStatusFacture()))
+                    .build();
+            return new ResponseEntity<>(factureToCreate, HttpStatus.CREATED);
+        }else {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+//        Facture factureCreate = factureService.create(facture);
+//        return new ResponseEntity<>(factureCreate, HttpStatus.CREATED);
     }
 }
