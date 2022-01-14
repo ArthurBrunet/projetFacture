@@ -11,7 +11,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.util.Assert;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @SpringBootApplication
@@ -44,6 +46,19 @@ public class ProjetSpringBootApplication {
             );
 
             List<Facture> facturesClient = factureService.getAllFactureByClient(client);
+
+            LocalDate localDateSearch = LocalDate.now();
+            LocalDate firstDayOfMonth = localDateSearch.withDayOfMonth(1);
+            LocalDate lastDayOfMonth = firstDayOfMonth.plusMonths(1).minusDays(1);
+            List<Facture> factureByMonthList = factureService.findByDateEmiseBetween(firstDayOfMonth,lastDayOfMonth);
+
+            LocalDate localDateSearchPast = LocalDate.now().minusMonths(2);
+            LocalDate firstDayOfMonth2 = localDateSearchPast.withDayOfMonth(1);
+            LocalDate lastDayOfMonth2 = firstDayOfMonth2.plusMonths(1).minusDays(1);
+
+            List<Facture> factureByMonthList2 = factureService.findByDateEmiseBetween(firstDayOfMonth2,lastDayOfMonth2);
+
+            System.out.println(factureByMonthList2);
         };
     }
 
