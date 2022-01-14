@@ -1,9 +1,12 @@
 package com.excel.projetspringboot.models.typeGlobal;
 
-public enum TypeTVA {
-    NORMAL(20),INTER(10),REDUIT(5.5),PARTICULIER(2.1);
+import java.lang.reflect.Type;
+import java.util.Arrays;
 
-    private final double somme;
+public enum TypeTVA {
+    NORMAL(20.0),INTER(10.0),REDUIT(5.5),PARTICULIER(2.1);
+
+    private final Double somme;
 
     TypeTVA(double somme) {
         this.somme = somme;
@@ -13,7 +16,12 @@ public enum TypeTVA {
         return somme;
     }
 
-    public static TypeTVA valueofLabel(String label) {
-        return TypeTVA.valueOf(label);
+    public static TypeTVA valueOfLabel(double somme) {
+        for (TypeTVA e : values()) {
+            if (e.somme.equals(somme)) {
+                return e;
+            }
+        }
+        return null;
     }
 }

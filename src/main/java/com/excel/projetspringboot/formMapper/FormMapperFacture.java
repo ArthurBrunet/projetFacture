@@ -14,6 +14,8 @@ public class FormMapperFacture {
 
     private String typeStatusFacture;
 
+    private String formType;
+
     public Long getId() {
         return id;
     }
@@ -60,5 +62,13 @@ public class FormMapperFacture {
 
     public void setTypeStatusFacture(String typeStatusFacture) {
         this.typeStatusFacture = typeStatusFacture;
+    }
+
+    public String getFormType() {
+        return formType;
+    }
+
+    public void setFormType(String formType) {
+        this.formType = formType;
     }
 }

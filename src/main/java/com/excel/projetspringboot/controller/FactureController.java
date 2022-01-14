@@ -58,7 +58,8 @@ public class FactureController {
         modelMap.addAttribute("TVATypes", TypeTVA.values());
         modelMap.addAttribute("encaissementTypes", TypeEncaissementFacture.values());
         modelMap.addAttribute("statusFacture", TypeStatusFacture.values());
-        modelMap.addAttribute("facture", new FactureFormation());
+        modelMap.addAttribute("facture", new FormMapperFacture());
+        modelMap.addAttribute("typeFacture","formation");
         return "facture/factureForm";
     }
 
@@ -71,30 +72,44 @@ public class FactureController {
         modelMap.addAttribute("TVATypes", TypeTVA.values());
         modelMap.addAttribute("encaissementTypes", TypeEncaissementFacture.values());
         modelMap.addAttribute("statusFacture", TypeStatusFacture.values());
-        modelMap.addAttribute("facture", facturePrestation);
+        modelMap.addAttribute("facture", new FormMapperFacture());
         modelMap.addAttribute("factureClient", facturePrestation.getClient());
+        modelMap.addAttribute("typeFacture","prestation");
 
         return "facture/factureForm";
     }
 
     @PostMapping(value = {"/facture/create"})
-    public ResponseEntity<Facture> createFacture(@ModelAttribute FormMapperFacture facture) {
+    public String createFacture(@ModelAttribute FormMapperFacture facture) {
         Long idClient = facture.getId();
         Optional<Client> client = clientService.getById(idClient);
         if (client.isPresent()){
-            Facture factureToCreate = new Facture().toBuilder()
-                    .client(client.get())
-                    .tva(TypeTVA.valueofLabel(facture.getTva()))
-                    .HT(facture.getHT())
-                    .nature(facture.getNature())
-                    .ref(facture.getRef())
-                    .typeStatusFacture(TypeStatusFacture.valueOf(facture.getTypeStatusFacture()))
-                    .build();
-            return new ResponseEntity<>(factureToCreate, HttpStatus.CREATED);
+            if (facture.getFormType().equals("prestation")){
+                Facture factureToCreate = new FacturePrestation().toBuilder()
+                        .client(client.get())
+                        .tva(TypeTVA.valueOfLabel(Double.parseDouble(facture.getTva())))
+                        .HT(facture.getHT())
+                        .nature(facture.getNature())
+                        .ref(facture.getRef())
+                        .typeStatusFacture(TypeStatusFacture.valueOfLabel(facture.getTypeStatusFacture()))
+                        .build();
+                Facture facturecreate = factureService.createFacture(factureToCreate);
+                return "redirect:/facture/factures";
+
+            }else {
+                Facture factureToCreate = new FactureFormation().toBuilder()
+                        .client(client.get())
+                        .tva(TypeTVA.valueOfLabel(Double.parseDouble(facture.getTva())))
+                        .HT(facture.getHT())
+                        .nature(facture.getNature())
+                        .ref(facture.getRef())
+                        .typeStatusFacture(TypeStatusFacture.valueOfLabel(facture.getTypeStatusFacture()))
+                        .build();
+                Facture facturecreate = factureService.createFacture(factureToCreate);
+                return "redirect:/facture/factures";
+            }
         }else {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            return "redirect:/facture/factures";
         }
-//        Facture factureCreate = factureService.create(facture);
-//        return new ResponseEntity<>(factureCreate, HttpStatus.CREATED);
     }
 }

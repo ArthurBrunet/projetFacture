@@ -31,7 +31,7 @@ public class ProjetSpringBootApplication {
                     .prenom("toto")
                     .fullAdress("10 rue de l'ancienne Prison, Rouen")
                     .build());
-            factureService.create(
+            factureService.createFacture(
                     new FactureFormation()
                             .toBuilder()
                             .tva(TypeTVA.NORMAL)

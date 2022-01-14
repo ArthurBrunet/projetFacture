@@ -23,7 +23,7 @@ public class FactureService {
         return (List<Facture>) factureRepository.findAll();
     }
 
-    public Facture create(Facture facture) {
+    public Facture createFacture(Facture facture) {
         double HT = facture.getHT();
         double TVA = facture.getTva().getSomme();
         double tvaSomme = (TVA / 100) * HT;

@@ -10,7 +10,16 @@ public enum TypeStatusFacture {
         this.value = value;
     }
 
-    public String value() {
+    public String getValue() {
         return value;
+    }
+
+    public static TypeStatusFacture valueOfLabel(String value) {
+        for (TypeStatusFacture e : values()) {
+            if (e.value.equals(value)) {
+                return e;
+            }
+        }
+        return null;
     }
 }
