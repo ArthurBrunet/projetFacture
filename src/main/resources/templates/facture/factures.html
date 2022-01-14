@@ -1,11 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>GettingStarted: ServingWeb Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
 <body>
-
-
+    <table class="table table-dark">
+        <thead>
+        <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Status paiement</th>
+            <th scope="col">Référence</th>
+            <th scope="col">Client</th>
+            <th scope="col">Nature</th>
+            <th scope="col">TVA</th>
+            <th scope="col">TVA somme</th>
+            <th scope="col">HT</th>
+            <th scope="col">TTC</th>
+            <th scope="col">Date paiement</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${factureList}">
+            <th scope="col" th:text="*{dateEmise}"></th>
+            <th scope="col" th:text="*{typeStatusFacture}"></th>
+            <th scope="col" th:text="*{ref}"></th>
+            <th scope="col" th:text="*{client.nom +' '+ client.prenom}"></th>
+            <th scope="col" th:text="*{nature}"></th>
+            <th scope="col" th:text="*{tva}"></th>
+            <th scope="col" th:text="*{tvaSomme}"></th>
+            <th scope="col" th:text="*{HT}"></th>
+            <th scope="col" th:text="*{ttc}"></th>
+            <th scope="col" th:text="*{datePaid}"></th>
+        </tr>
+        </tbody>
+    </table>
 </body>
 </html>
