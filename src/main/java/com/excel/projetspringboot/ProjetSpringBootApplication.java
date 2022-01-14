@@ -38,7 +38,21 @@ public class ProjetSpringBootApplication {
                             .toBuilder()
                             .tva(TypeTVA.NORMAL)
                             .nature("bdza")
+                            .HT(200)
                             .ref("resf")
+                            .client(client)
+                            .typeStatusFacture(TypeStatusFacture.PAYE)
+                            .nbCandidat(20)
+                            .build()
+            );
+
+            factureService.createFacture(
+                    new FactureFormation()
+                            .toBuilder()
+                            .tva(TypeTVA.NORMAL)
+                            .nature("bdza")
+                            .HT(500)
+                            .ref("resdzef")
                             .client(client)
                             .typeStatusFacture(TypeStatusFacture.PAYE)
                             .nbCandidat(20)

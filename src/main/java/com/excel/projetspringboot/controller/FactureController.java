@@ -30,13 +30,6 @@ public class FactureController {
     @Autowired
     ClientService clientService;
 
-//    @GetMapping("/factures")
-//    public String getAllFacture(ModelMap modelMap) {
-//        List<Facture> factureList = factureService.getAllFacture();
-//        modelMap.addAttribute("factureList", factureList);
-//        return "facture/factures";
-//    }
-
     @GetMapping("/facture")
     public String getFacture(@RequestParam(name = "ref") String ref, ModelMap modelMap) {
         Facture facture = factureService.getFactureByRef(ref);
@@ -83,6 +76,10 @@ public class FactureController {
         LocalDate firstDayOfMonth = date.withDayOfMonth(1);
         LocalDate lastDayOfMonth = firstDayOfMonth.plusMonths(1).minusDays(1);
         List<Facture> factureList =  factureService.findByDateEmiseBetween(firstDayOfMonth,lastDayOfMonth);
+        Double sumTTC = factureList.stream().mapToDouble(Facture::getTtc).sum();
+        Double sumHT = factureList.stream().mapToDouble(Facture::getHT).sum();
+        modelMap.addAttribute("sumTTC", sumTTC);
+        modelMap.addAttribute("sumHT", sumHT);
         modelMap.addAttribute("factureList", factureList);
         return "facture/factures";
     }

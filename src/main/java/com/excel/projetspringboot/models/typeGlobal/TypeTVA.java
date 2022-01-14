@@ -1,8 +1,5 @@
 package com.excel.projetspringboot.models.typeGlobal;
 
-import java.lang.reflect.Type;
-import java.util.Arrays;
-
 public enum TypeTVA {
     NORMAL(20.0),INTER(10.0),REDUIT(5.5),PARTICULIER(2.1);
 
