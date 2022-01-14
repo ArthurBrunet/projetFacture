@@ -1,8 +1,12 @@
 package com.excel.projetspringboot.formMapper;
 
+import java.time.LocalDate;
+
 public class FormMapperFacture {
 
     private Long id;
+
+    private Long idClient;
 
     private double HT;
 
@@ -15,6 +19,18 @@ public class FormMapperFacture {
     private String typeStatusFacture;
 
     private String formType;
+
+    private String datePaid;
+
+    private String dateEmise;
+
+    public String getDateEmise() {
+        return dateEmise;
+    }
+
+    public void setDateEmise(String dateEmise) {
+        this.dateEmise = dateEmise;
+    }
 
     public Long getId() {
         return id;
@@ -54,6 +70,22 @@ public class FormMapperFacture {
 
     public void setTva(String tva) {
         this.tva = tva;
+    }
+
+    public String getDatePaid() {
+        return datePaid;
+    }
+
+    public void setDatePaid(String datePaid) {
+        this.datePaid = datePaid;
+    }
+
+    public Long getIdClient() {
+        return idClient;
+    }
+
+    public void setIdClient(Long idClient) {
+        this.idClient = idClient;
     }
 
     public String getTypeStatusFacture() {

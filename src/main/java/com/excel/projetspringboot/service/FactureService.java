@@ -29,10 +29,6 @@ public class FactureService {
         double tvaSomme = (TVA / 100) * HT;
         facture.setTvaSomme(tvaSomme);
         facture.setTtc(HT+tvaSomme);
-        facture.setDateEmise(LocalDate.now());
-        if (facture.getTypeStatusFacture() == TypeStatusFacture.PAYE){
-            facture.setDatePaid(LocalDate.now());
-        }
         return factureRepository.save(facture);
     }
 

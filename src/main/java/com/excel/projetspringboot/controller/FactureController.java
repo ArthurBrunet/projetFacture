@@ -43,19 +43,32 @@ public class FactureController {
     }
 
     @GetMapping("/facture/formation/form")
-    public String formFactureFormation(ModelMap modelMap) {
+    public String formFactureFormation(@RequestParam(name = "ref", required = false) String ref, ModelMap modelMap) {
         List<Client> listClient = clientService.getAll();
+        FormMapperFacture formMapperFacture = new FormMapperFacture();
+        if (ref != null) {
+            FactureFormation factureFormation = (FactureFormation) factureService.getFactureByRef(ref);
+            formMapperFacture.setDateEmise(factureFormation.getDateEmise().toString());
+            formMapperFacture.setDatePaid(factureFormation.getDatePaid().toString());
+            formMapperFacture.setIdClient(factureFormation.getClient().getId());
+            formMapperFacture.setFormType("formation");
+            formMapperFacture.setId(factureFormation.getId());
+            formMapperFacture.setHT(factureFormation.getHT());
+            formMapperFacture.setTva(Double.toString(factureFormation.getTva().getSomme()));
+            formMapperFacture.setTypeStatusFacture(factureFormation.getTypeStatusFacture().toString());
+            formMapperFacture.setNature(factureFormation.getNature());
+        }
         modelMap.addAttribute("listClient", listClient);
         modelMap.addAttribute("TVATypes", TypeTVA.values());
         modelMap.addAttribute("encaissementTypes", TypeEncaissementFacture.values());
         modelMap.addAttribute("statusFacture", TypeStatusFacture.values());
-        modelMap.addAttribute("facture", new FormMapperFacture());
+        modelMap.addAttribute("facture", formMapperFacture);
         modelMap.addAttribute("typeFacture","formation");
         return "facture/factureForm";
     }
 
     @GetMapping("/facture/prestation/form")
-    public String formFacturePrestation(ModelMap modelMap) {
+    public String formFacturePrestation(@RequestParam(name = "ref", required = false) String ref, ModelMap modelMap) {
         List<Client> listClient = clientService.getAll();
         FacturePrestation facturePrestation = new FacturePrestation();
 
@@ -86,31 +99,36 @@ public class FactureController {
 
     @PostMapping(value = {"/facture/create"})
     public String createFacture(@ModelAttribute FormMapperFacture facture) {
-        Long idClient = facture.getId();
+        Long idClient = facture.getIdClient();
         Optional<Client> client = clientService.getById(idClient);
         if (client.isPresent()){
             if (facture.getFormType().equals("prestation")){
                 Facture factureToCreate = new FacturePrestation().toBuilder()
+                        .id(facture.getId())
                         .client(client.get())
                         .tva(TypeTVA.valueOfLabel(Double.parseDouble(facture.getTva())))
                         .HT(facture.getHT())
                         .nature(facture.getNature())
                         .ref(facture.getRef())
                         .typeStatusFacture(TypeStatusFacture.valueOfLabel(facture.getTypeStatusFacture()))
+                        .datePaid(LocalDate.parse(facture.getDatePaid()))
+                        .dateEmise(LocalDate.parse(facture.getDateEmise()))
                         .build();
-                Facture facturecreate = factureService.createFacture(factureToCreate);
+                factureService.createFacture(factureToCreate);
                 return "redirect:/facture/factures";
-
             }else {
                 Facture factureToCreate = new FactureFormation().toBuilder()
+                        .id(facture.getId())
                         .client(client.get())
                         .tva(TypeTVA.valueOfLabel(Double.parseDouble(facture.getTva())))
                         .HT(facture.getHT())
                         .nature(facture.getNature())
                         .ref(facture.getRef())
                         .typeStatusFacture(TypeStatusFacture.valueOfLabel(facture.getTypeStatusFacture()))
+                        .datePaid(LocalDate.parse(facture.getDatePaid()))
+                        .dateEmise(LocalDate.parse(facture.getDateEmise()))
                         .build();
-                Facture facturecreate = factureService.createFacture(factureToCreate);
+                factureService.createFacture(factureToCreate);
                 return "redirect:/facture/factures";
             }
         }else {
