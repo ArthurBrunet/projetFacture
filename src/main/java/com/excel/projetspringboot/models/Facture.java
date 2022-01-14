@@ -44,7 +44,6 @@ public class Facture implements Serializable {
     @JoinColumn(name = "client_id")
     private Client client;
 
-    @Column(unique = true)
     private String ref;
 
     public Facture() {

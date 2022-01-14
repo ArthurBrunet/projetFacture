@@ -3,6 +3,7 @@ package com.excel.projetspringboot;
 import com.excel.projetspringboot.models.Client;
 import com.excel.projetspringboot.models.Facture;
 import com.excel.projetspringboot.models.typeFacture.FactureFormation;
+import com.excel.projetspringboot.models.typeFacture.FacturePrestation;
 import com.excel.projetspringboot.models.typeGlobal.TypeStatusFacture;
 import com.excel.projetspringboot.models.typeGlobal.TypeTVA;
 import com.excel.projetspringboot.service.ClientService;
@@ -38,6 +39,7 @@ public class ProjetSpringBootApplication {
                             .toBuilder()
                             .tva(TypeTVA.NORMAL)
                             .nature("bdza")
+                            .dateEmise(LocalDate.now())
                             .HT(200)
                             .ref("resf")
                             .client(client)
@@ -47,15 +49,16 @@ public class ProjetSpringBootApplication {
             );
 
             factureService.createFacture(
-                    new FactureFormation()
+                    new FacturePrestation()
                             .toBuilder()
                             .tva(TypeTVA.NORMAL)
                             .nature("bdza")
                             .HT(500)
+                            .dateEmise(LocalDate.now())
+                            .datePaid(LocalDate.now().plusDays(14))
                             .ref("resdzef")
                             .client(client)
                             .typeStatusFacture(TypeStatusFacture.PAYE)
-                            .nbCandidat(20)
                             .build()
             );
 

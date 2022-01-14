@@ -52,6 +52,7 @@ public class FactureController {
             formMapperFacture.setDatePaid(factureFormation.getDatePaid().toString());
             formMapperFacture.setIdClient(factureFormation.getClient().getId());
             formMapperFacture.setFormType("formation");
+            formMapperFacture.setRef(factureFormation.getRef());
             formMapperFacture.setId(factureFormation.getId());
             formMapperFacture.setHT(factureFormation.getHT());
             formMapperFacture.setTva(Double.toString(factureFormation.getTva().getSomme()));
@@ -71,12 +72,25 @@ public class FactureController {
     public String formFacturePrestation(@RequestParam(name = "ref", required = false) String ref, ModelMap modelMap) {
         List<Client> listClient = clientService.getAll();
         FacturePrestation facturePrestation = new FacturePrestation();
-
+        FormMapperFacture formMapperFacture = new FormMapperFacture();
+        if (ref != null) {
+            FacturePrestation facturePrestation1 = (FacturePrestation) factureService.getFactureByRef(ref);
+            formMapperFacture.setDateEmise(facturePrestation1.getDateEmise().toString());
+            formMapperFacture.setDatePaid(facturePrestation1.getDatePaid().toString());
+            formMapperFacture.setIdClient(facturePrestation1.getClient().getId());
+            formMapperFacture.setFormType("prestation");
+            formMapperFacture.setRef(facturePrestation1.getRef());
+            formMapperFacture.setId(facturePrestation1.getId());
+            formMapperFacture.setHT(facturePrestation1.getHT());
+            formMapperFacture.setTva(Double.toString(facturePrestation1.getTva().getSomme()));
+            formMapperFacture.setTypeStatusFacture(facturePrestation1.getTypeStatusFacture().toString());
+            formMapperFacture.setNature(facturePrestation1.getNature());
+        }
         modelMap.addAttribute("listClient", listClient);
         modelMap.addAttribute("TVATypes", TypeTVA.values());
         modelMap.addAttribute("encaissementTypes", TypeEncaissementFacture.values());
         modelMap.addAttribute("statusFacture", TypeStatusFacture.values());
-        modelMap.addAttribute("facture", new FormMapperFacture());
+        modelMap.addAttribute("facture", formMapperFacture);
         modelMap.addAttribute("factureClient", facturePrestation.getClient());
         modelMap.addAttribute("typeFacture","prestation");
 
@@ -103,18 +117,31 @@ public class FactureController {
         Optional<Client> client = clientService.getById(idClient);
         if (client.isPresent()){
             if (facture.getFormType().equals("prestation")){
-                Facture factureToCreate = new FacturePrestation().toBuilder()
-                        .id(facture.getId())
-                        .client(client.get())
-                        .tva(TypeTVA.valueOfLabel(Double.parseDouble(facture.getTva())))
-                        .HT(facture.getHT())
-                        .nature(facture.getNature())
-                        .ref(facture.getRef())
-                        .typeStatusFacture(TypeStatusFacture.valueOfLabel(facture.getTypeStatusFacture()))
-                        .datePaid(LocalDate.parse(facture.getDatePaid()))
-                        .dateEmise(LocalDate.parse(facture.getDateEmise()))
-                        .build();
-                factureService.createFacture(factureToCreate);
+                FacturePrestation factureCreation = null;
+                if (facture.getId() != null) {
+                    factureCreation = (FacturePrestation) factureService.getFactureByRef(facture.getRef());
+                    factureCreation.setHT(facture.getHT());
+                    factureCreation.setId(facture.getId());
+                    factureCreation.setTva(TypeTVA.valueOfLabel(Double.parseDouble(facture.getTva())));
+                    factureCreation.setDateEmise(LocalDate.parse(facture.getDateEmise()));
+                    factureCreation.setClient(client.get());
+                    factureCreation.setNature(facture.getNature());
+                    factureCreation.setDatePaid(LocalDate.parse(facture.getDatePaid()));
+                    factureCreation.setTypeStatusFacture(TypeStatusFacture.valueOfLabel(facture.getTypeStatusFacture()));
+                    factureCreation.setRef(facture.getRef());
+                }else {
+                    factureCreation = new FacturePrestation().toBuilder()
+                            .client(client.get())
+                            .tva(TypeTVA.valueOfLabel(Double.parseDouble(facture.getTva())))
+                            .HT(facture.getHT())
+                            .nature(facture.getNature())
+                            .ref(facture.getRef())
+                            .typeStatusFacture(TypeStatusFacture.valueOfLabel(facture.getTypeStatusFacture()))
+                            .datePaid(LocalDate.parse(facture.getDatePaid()))
+                            .dateEmise(LocalDate.parse(facture.getDateEmise()))
+                            .build();
+                }
+                factureService.createFacture(factureCreation);
                 return "redirect:/facture/factures";
             }else {
                 Facture factureToCreate = new FactureFormation().toBuilder()
