@@ -2,7 +2,6 @@ package com.excel.projetspringboot.repository;
 
 import com.excel.projetspringboot.models.Client;
 import com.excel.projetspringboot.models.Facture;
-import com.excel.projetspringboot.models.typeFacture.FactureFormation;
 import org.springframework.data.repository.CrudRepository;
 
 import java.time.LocalDate;

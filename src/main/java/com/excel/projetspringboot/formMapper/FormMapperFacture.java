@@ -11,6 +11,8 @@ public class FormMapperFacture {
 
     private String nature;
 
+    private int nbCandidat;
+
     private String ref;
 
     private String tva;
@@ -101,5 +103,13 @@ public class FormMapperFacture {
 
     public void setFormType(String formType) {
         this.formType = formType;
+    }
+
+    public int getNbCandidat() {
+        return nbCandidat;
+    }
+
+    public void setNbCandidat(int nbCandidat) {
+        this.nbCandidat = nbCandidat;
     }
 }

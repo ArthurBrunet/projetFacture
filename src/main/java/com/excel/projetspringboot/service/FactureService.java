@@ -2,10 +2,6 @@ package com.excel.projetspringboot.service;
 
 import com.excel.projetspringboot.models.Client;
 import com.excel.projetspringboot.models.Facture;
-import com.excel.projetspringboot.models.typeFacture.FactureFormation;
-import com.excel.projetspringboot.models.typeFacture.FacturePrestation;
-import com.excel.projetspringboot.models.typeGlobal.TypeStatusFacture;
-import com.excel.projetspringboot.models.typeGlobal.TypeTVA;
 import com.excel.projetspringboot.repository.FactureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

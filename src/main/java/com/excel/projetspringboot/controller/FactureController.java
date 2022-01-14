@@ -144,18 +144,33 @@ public class FactureController {
                 factureService.createFacture(factureCreation);
                 return "redirect:/facture/factures";
             }else {
-                Facture factureToCreate = new FactureFormation().toBuilder()
-                        .id(facture.getId())
-                        .client(client.get())
-                        .tva(TypeTVA.valueOfLabel(Double.parseDouble(facture.getTva())))
-                        .HT(facture.getHT())
-                        .nature(facture.getNature())
-                        .ref(facture.getRef())
-                        .typeStatusFacture(TypeStatusFacture.valueOfLabel(facture.getTypeStatusFacture()))
-                        .datePaid(LocalDate.parse(facture.getDatePaid()))
-                        .dateEmise(LocalDate.parse(facture.getDateEmise()))
-                        .build();
-                factureService.createFacture(factureToCreate);
+                FactureFormation factureFormation = null;
+                if (facture.getId() != null) {
+                    factureFormation = (FactureFormation) factureService.getFactureByRef(facture.getRef());
+                    factureFormation.setHT(facture.getHT());
+                    factureFormation.setId(facture.getId());
+                    factureFormation.setNbCandidat(facture.getNbCandidat());
+                    factureFormation.setTva(TypeTVA.valueOfLabel(Double.parseDouble(facture.getTva())));
+                    factureFormation.setDateEmise(LocalDate.parse(facture.getDateEmise()));
+                    factureFormation.setClient(client.get());
+                    factureFormation.setNature(facture.getNature());
+                    factureFormation.setDatePaid(LocalDate.parse(facture.getDatePaid()));
+                    factureFormation.setTypeStatusFacture(TypeStatusFacture.valueOfLabel(facture.getTypeStatusFacture()));
+                    factureFormation.setRef(facture.getRef());
+                }else {
+                    factureFormation = new FactureFormation().toBuilder()
+                            .id(facture.getId())
+                            .client(client.get())
+                            .tva(TypeTVA.valueOfLabel(Double.parseDouble(facture.getTva())))
+                            .HT(facture.getHT())
+                            .nature(facture.getNature())
+                            .ref(facture.getRef())
+                            .typeStatusFacture(TypeStatusFacture.valueOfLabel(facture.getTypeStatusFacture()))
+                            .datePaid(LocalDate.parse(facture.getDatePaid()))
+                            .dateEmise(LocalDate.parse(facture.getDateEmise()))
+                            .build();
+                }
+                factureService.createFacture(factureFormation);
                 return "redirect:/facture/factures";
             }
         }else {
