@@ -15,11 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,12 +30,12 @@ public class FactureController {
     @Autowired
     ClientService clientService;
 
-    @GetMapping("/factures")
-    public String getAllFacture(ModelMap modelMap) {
-        List<Facture> factureList = factureService.getAllFacture();
-        modelMap.addAttribute("factureList", factureList);
-        return "facture/factures";
-    }
+//    @GetMapping("/factures")
+//    public String getAllFacture(ModelMap modelMap) {
+//        List<Facture> factureList = factureService.getAllFacture();
+//        modelMap.addAttribute("factureList", factureList);
+//        return "facture/factures";
+//    }
 
     @GetMapping("/facture")
     public String getFacture(@RequestParam(name = "ref") String ref, ModelMap modelMap) {
@@ -77,6 +75,14 @@ public class FactureController {
         modelMap.addAttribute("typeFacture","prestation");
 
         return "facture/factureForm";
+    }
+
+    @GetMapping("/factures")
+    public void getFacturesByDate(@RequestParam(name = "date") String stringDateSearch) {
+        LocalDate date = LocalDate.parse(stringDateSearch);
+        LocalDate firstDayOfMonth = date.withDayOfMonth(1);
+        LocalDate lastDayOfMonth = firstDayOfMonth.plusMonths(1).minusDays(1);
+        List<Facture> factureList =  factureService.findByDateEmiseBetween(firstDayOfMonth,lastDayOfMonth);
     }
 
     @PostMapping(value = {"/facture/create"})

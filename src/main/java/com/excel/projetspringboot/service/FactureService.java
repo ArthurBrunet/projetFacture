@@ -44,4 +44,8 @@ public class FactureService {
         return factureRepository.findByRef(ref);
     }
 
+    public List<Facture> findByDateEmiseBetween(LocalDate firstDayOfMonth, LocalDate lastDayOfMonth) {
+        return factureRepository.findByDateEmiseBetween(firstDayOfMonth,lastDayOfMonth);
+    }
+
 }
